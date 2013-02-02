@@ -15,4 +15,6 @@ MCU: Atmega368
 
 A black box, the only interface being a mini USB port for serial communication.  A login prompt requests credentials from the user.
 
-Attack Scenario: Authentication Bypass
+Attack Scenarios:<br>
+*Password Cracking<br>
+*Authentication Bypass
