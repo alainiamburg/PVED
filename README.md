@@ -11,7 +11,7 @@ Purposely Vulnerable Embedded Device
 
 <br>
 == Version 0.1 ==<br>
-MCU: Atmega368
+MCU: Atmega328
 
 A black box, the only interface being a mini USB port for serial communication.  A login prompt requests credentials from the user.
 
