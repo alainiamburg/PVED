@@ -1,0 +1,9 @@
+== HW ==
+* AVRISP mkII
+* Saleae Logic 16
+* Bus Pirate
+
+
+== SW ==
+* Tera Term
+* AVR Studio 4

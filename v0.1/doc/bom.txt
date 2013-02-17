@@ -1,0 +1,12 @@
+1x ATMEGA328P-PU
+1x CAT25128LI-G
+1x FTDI Basic Breakout - 5V
+1x 0.1uF Ceramic Capacitor
+1x 10uF Electrolytic Capacitor
+1x Strip break-away header pins - Male, Straight
+1x Strip break-away header pins - Male, Right Angle
+1x KIT-1593K-BK
+1-3x Roll 22 AWG solid-core wire (recommend multiple colors)
+1x 28-pin DIP socket (optional, recommended)
+1x 8-pin DIP socket (optional, recommended)
+1x 1N4001 Diode (optional, to help prevent damage from polarity reversal)
