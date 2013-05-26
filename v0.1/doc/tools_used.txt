@@ -7,3 +7,5 @@
 == SW ==
 * Tera Term
 * AVR Studio 4
+* Saleae
+* Python

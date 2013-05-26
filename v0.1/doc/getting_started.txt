@@ -1,0 +1,56 @@
+This file contains instructions for programming and talking to the PVED. Please see "windows_environment_setup.txt" for instructions on setting up a programming environment in Windows.
+
+
+Note: This guide is for AVR Studio 4 with WinAVR (Windows).
+###########################################################
+
+
+1) Download and install AVR Studio:
+	- http://www.atmel.com/tools/STUDIOARCHIVE.aspx
+
+
+2) Plug in the AVRISP mkII programmer via USB
+	- ensure it is recognized by the operating system.
+
+
+3) Plug in the PVED via USB
+	- ensure it is recognized by the operating system.
+
+
+4) Connect the programming cable of the AVRISP mkII to the PVED via a programming header
+	- see schematic
+
+
+5) Open AVR Studio and select "Tools" -> "Program AVR" -> "Connect..."
+
+
+6) Choose AVRISP mkII in the list and click "Connect..."
+
+
+7) Select the "HW Settings" tab
+	- ensure the device is receiving the proper voltage (5 volts)
+
+
+8) Select the "Main" tab
+	- ensure "ATmega328P" is selected in the dropdown list
+	- click "Read Signature" and ensure the signature matches ATmega328P
+
+
+9) Select the "Program" tab and program the device
+	- enter the path of PVED.elf in the "ELF Production File Format" section
+	- click "Program"
+	- a progress bar should indicate when programming is completed
+
+
+10) Select the "Fuses" tab
+	- programming the .ELF file should have programmed the fuses
+	- read the fuses and ensure "CKDIV8" is UN-checked
+
+
+11) Connect to PVED via serial using Tera Term or similar
+	- check Device Manager for COM port number
+	- use 9600 baud, 8-N-1
+	- hit enter to get PVED out of idle state
+	- you should see a login prompt
+
+

@@ -1,0 +1,26 @@
+Instructions for setting up a Windows development environment:
+##############################################################
+
+
+1) Download and install WinAVR:
+	- http://winavr.sourceforge.net/
+
+
+2) Download and install AVR Studio:
+	- http://www.atmel.com/tools/STUDIOARCHIVE.aspx
+
+
+3) Create a project in AVR Studio
+	- select AVR GCC
+	- select ATmega328P
+
+
+4) Add source files and configuration
+	- add source/header files to project
+	- go to "Project" -> "Configuration Options" -> "Custom Options"
+		- check "Use WinAVR" and provide paths pointing to avr-gcc and make
+		
+
+5) Building
+	- click "Build" -> "Build"
+	- a .hex file will be produced
