@@ -606,7 +606,12 @@ void eeprom_erase(void)
 */
 void eeprom_write(WORD address, BYTE *buffer, unsigned int len)
 {
-	eeprom_write_enable();	// Enable Writing
+	/* Enable Writing */	
+	PORTB &= ~(1<<SPI_SS);
+	spi_write(EEPROM_WREN);		// Send Write Enable comand
+	PORTB |= (1<<SPI_SS);
+	_delay_ms(EEPROM_DELAY);
+	
 	
 	PORTB &= ~(1<<SPI_SS);		// Bring down SS (active low)
 
@@ -624,26 +629,9 @@ void eeprom_write(WORD address, BYTE *buffer, unsigned int len)
 	    spi_write(*(buffer + i));	// Write, one byte at a time
 	}
 
-	// We are finished with you, slave
 	PORTB |= (1<<SPI_SS);
 }
 
-
-/*
-**
-** Enable EEPROM writing
-** 
-**
-**
-*/
-void eeprom_write_enable(void)
-{
-	PORTB &= ~(1<<SPI_SS);
-
-	spi_write(EEPROM_WREN);		// Send Write Enable comand
-
-	PORTB |= (1<<SPI_SS);
-}
 
 
 /*
