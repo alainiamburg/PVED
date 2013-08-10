@@ -49,11 +49,7 @@ const struct CRED creds[NUM_USERS] =
 
 
 /*
-**
 ** Main function loop
-**
-**
-**
 */
 int main(void)
 {
@@ -93,11 +89,7 @@ int main(void)
 
 
 /*
-**
 ** First run EEPROM programming
-**
-**
-**
 */
 int first_run(void)
 {
@@ -113,7 +105,6 @@ int first_run(void)
 	else
 	{
 		puts("This is the first run! Burning EEPROM...\r\n");
-
 		for (int i = 0; i < NUM_USERS; i++)
 		{
 			eeprom_write(EEPROM_CRED_BASE + (i*EEPROM_PAGE_SIZE), (BYTE*)&creds[i], EEPROM_CRED_SIZE);
@@ -129,11 +120,7 @@ int first_run(void)
 
 
 /*
-**
 ** Idle State
-**
-**
-**
 */
 void idle(void)
 {
@@ -148,11 +135,7 @@ void idle(void)
 
 
 /*
-**
 ** Pre Auth State
-**
-**
-**
 */
 void login(void)
 {
@@ -162,10 +145,8 @@ void login(void)
 
 	printf("Username: ");
 	serial_getLine(cred_attempt.user, ECHO_ON);
-
 	printf("Password: ");
 	serial_getLine(pass_attempt, ECHO_OFF);
-
 
 	md5_hash((BYTE*)pass_attempt, cred_attempt.hash, strlen(pass_attempt));
 
@@ -188,11 +169,7 @@ void login(void)
 
 
 /*
-**
 ** Post Auth State
-**
-**
-**
 */
 void shell(void)
 {
@@ -205,11 +182,7 @@ void shell(void)
 
 
 /*
-**
 ** Execute Shell Command
-**
-**
-**
 */
 BYTE shell_command(void)
 {
@@ -353,11 +326,7 @@ void readback(void)
 
 
 /*
-**
 ** Get line from USB
-** 
-**
-**
 */
 void serial_getLine(char *buffer, BYTE echo)
 {
@@ -411,11 +380,7 @@ void serial_getLine(char *buffer, BYTE echo)
 
 
 /*
-**
 ** Perform MD5 hash
-** 
-**
-**
 */
 void md5_hash(BYTE *input, char *hash, BYTE len)
 {
@@ -435,11 +400,7 @@ void md5_hash(BYTE *input, char *hash, BYTE len)
 
 
 /*
-**
 ** Initialize Watchdog Timer for reset
-** 
-**
-**
 */
 void wdt_init(void)
 {
@@ -453,11 +414,7 @@ void wdt_init(void)
 
 
 /*
-**
 ** Initialize Data Direction Registers for I/O
-** 
-**
-**
 */
 void io_init(void)
 {
@@ -468,11 +425,7 @@ void io_init(void)
 
 
 /*
-**
 ** Initialize SPI Bus
-** 
-**
-**
 */
 void spi_init()
 {
@@ -486,11 +439,7 @@ void spi_init()
 
 
 /*
-**
 ** Initialize USART
-** 
-**
-**
 */
 void usart_init(void)
 {
@@ -508,11 +457,7 @@ void usart_init(void)
 
 
 /*
-**
 ** Initialize serial communications
-** 
-**
-**
 */
 void serial_init(void)
 {
@@ -528,11 +473,7 @@ void serial_init(void)
 
 
 /*
-**
 ** Initialize EEPROM
-** 
-**
-**
 */
 void eeprom_init(void)
 {
@@ -543,11 +484,7 @@ void eeprom_init(void)
 
 
 /*
-**
 ** Read from EEPROM
-** 
-**
-**
 */
 void eeprom_read(WORD address, BYTE *buffer, unsigned int len)
 {		
@@ -598,11 +535,7 @@ void eeprom_erase(void)
 
 
 /*
-**
 ** Write to EEPROM
-** 
-**
-**
 */
 void eeprom_write(WORD address, BYTE *buffer, unsigned int len)
 {
@@ -635,11 +568,7 @@ void eeprom_write(WORD address, BYTE *buffer, unsigned int len)
 
 
 /*
-**
 ** Write a byte to the SPI bus
-** 
-**
-**
 */
 BYTE spi_write(BYTE data)
 {
@@ -654,11 +583,7 @@ BYTE spi_write(BYTE data)
 
 
 /*
-**
 ** Write a byte to the USART
-** 
-**
-**
 */
 void usart_putchar(char c, FILE *stream)
 {
@@ -672,11 +597,7 @@ void usart_putchar(char c, FILE *stream)
 
 
 /*
-**
 ** Get a char from the USART
-** 
-**
-**
 */
 char usart_getchar(FILE *stream)
 {
