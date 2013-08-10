@@ -16,6 +16,6 @@ MCU: Atmega328
 A black box, the only interface being a mini USB port for serial communication.  A login prompt requests credentials from the user.
 
 Attack Scenarios:<br>
-*Authentication Bypass<br>
+*Password Reset<br>
 *Password Cracking
 
