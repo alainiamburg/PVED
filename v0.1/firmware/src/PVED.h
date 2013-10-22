@@ -107,7 +107,6 @@ void idle(void);
 
 void eeprom_init(void);
 void eeprom_read(WORD address, BYTE *buffer, unsigned int len);
-void eeprom_read_hilo(BYTE hiaddr, BYTE loaddr, BYTE *buffer, unsigned int len);
 void eeprom_read_page(BYTE page, BYTE *buffer);
 void eeprom_write(WORD address, BYTE *buffer, unsigned int len);
 void eeprom_erase(void);
