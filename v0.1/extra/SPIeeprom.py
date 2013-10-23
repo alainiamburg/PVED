@@ -62,19 +62,24 @@ def EEPROM_Read(usb, addr, readbytes, outfile):
 	success = 0
 	
 	# [COMMAND][NUMBER OF WRITE BYTES][NUMBER OF READ BYTES][BYTES TO WRITE]
-	#  (1byte)        (2 bytes)			     (2 bytes)       (0-4096 bytes)
+	#  (1byte)        (2 bytes)              (2 bytes)       (0-4096 bytes)
 	usb.write("\x04")                         # Write-Then-Read cmd
-	usb.write("\x00\x03")                     # Number of write bytes
-	usb.write(struct.pack('>h', readbytes))   # Number of read bytes
+	#usb.write("\x00\x03")                     # Number of write bytes  *Use this for ON SEMI SPI
+	usb.write("\x00\x04")                     # Number of write bytes  *Use this for WINBOND SPI
+	print "DEBUG: Reading {0} bytes".format(hex(readbytes))
+	usb.write(struct.pack('>H', readbytes))   # Number of read bytes
 	usb.write("\x03")                         # EEPROM Read command
-	usb.write(struct.pack('>h', addr))        # Read from addr
+	#usb.write(struct.pack('>h', addr))        # Read from addr   *Use this for 16 bit addrseses (ON SEMI SPI)
+	print "DEBUG: Reading from {0}".format(hex(addr))
+	usb.write(struct.pack('>B', addr>>16))
+	usb.write(struct.pack('>H', addr&0xFFFF))   # 24 bit address  *Use this for WINBOND SPI
+	time.sleep(0.5)                           # Bus Pirate needs more time for longer reads
 	if "\x01" == usb.read():
 		success = 1
-	data = usb.read(readbytes)
-	if args.x:
-		dump(data, 16, addr)
-		
-	outfile.write(data)
+		data = usb.read(readbytes)
+		outfile.write(data)
+		if args.x:
+			dump(data, 16, addr)
 
 	return success
 	
@@ -97,12 +102,12 @@ def EEPROM_Write(usb, addr, writebytes, infile):
 	
 	# Write-Then-Read command method (takes care of CS transitions)
 	# [COMMAND][NUMBER OF WRITE BYTES][NUMBER OF READ BYTES][BYTES TO WRITE]
-	#  (1byte)        (2 bytes)			     (2 bytes)       (0-4096 bytes)	
+	#  (1byte)        (2 bytes)              (2 bytes)       (0-4096 bytes)	
 	usb.write("\x04")                           # Write-Then-Read cmd
-	usb.write(struct.pack('>h', writebytes+3))  # Number of write bytes
+	usb.write(struct.pack('>H', writebytes+3))  # Number of write bytes
 	usb.write("\x00\x00")                       # Number of read bytes
 	usb.write("\x02")						    # EEPROM Write command
-	usb.write(struct.pack('>h', addr))		    # Write to addr
+	usb.write(struct.pack('>H', addr))		    # Write to addr
 
 	for b in range(writebytes):                 # Write
 		char = infile.read(1)
@@ -115,8 +120,9 @@ def EEPROM_Write(usb, addr, writebytes, infile):
 
 def bail(usb):
 	try:
-		usb.close()
 		f.close()
+		Bin_Exit(usb)
+		usb.close()
 		sys.exit(1)
 	except:
 		sys.exit(1)
@@ -124,7 +130,7 @@ def bail(usb):
 
 # Thanks Stephen Chappell
 # http://code.activestate.com/recipes/576945/
-# modded by Alain Iamburg
+#  modified by Alain Iamburg
 def dump(data, length, addr):
 	hex = lambda line: ' '.join('{:02x}'.format(b) for b in map(ord, line))
 	str = lambda line: ''.join(31 < c < 127 and chr(c) or '.' for c in map(ord, line))
@@ -137,34 +143,40 @@ def dump(data, length, addr):
 
 # Program Start
 
-parser = argparse.ArgumentParser(description="Read from or write to a SPI EEPROM using the Bus Pirate")
-parser.add_argument("interface", help="Bus Pirate serial interface")
+parser = argparse.ArgumentParser(description="Bus Pirate script for SPI EEPROM read/write.")
+parser.add_argument("bp_interface", help="Bus Pirate serial interface (e.g. /dev/ttyUSB0)")
+parser.add_argument("eeprom_chip", choices=['cat25128', 'w25q32bv'], help="specify EEPROM chip")
 parser.add_argument("addr", type=int, help="EEPROM address from which to read/write")
-parser.add_argument("mode", choices=['read', 'write'], help="read or write")
+parser.add_argument("mode", choices=['r', 'w'], help="read or write")
 parser.add_argument("numbytes", type=int, help="number of bytes to read or write")
 parser.add_argument("file", help="file from which to read or write")
-parser.add_argument("-x", help="also dump to screen", action="store_true")
+parser.add_argument("-x", help="also dump data to screen", action="store_true")
+parser.add_argument("-p", help="enable power from Bus Pirate", action="store_true")
 args = parser.parse_args()
 
 if args.mode == "write" and args.numbytes > 64:
 	print "TODO: Add support to write more than 64 bytes at a time.\r\n"
 	sys.exit(1)
 		
+if args.numbytes > 4096:
+	print "TODO: Add support to read more than 4096 bytes at a time.\r\n"
+	sys.exit(1)
+
 if not os.access(args.interface, os.W_OK):
-	print "[-] Cannot access interface. Ensure correct interface and user permissions\r\n"
+	print "[-] Cannot access interface. Check your permissions.\r\n"
 	sys.exit(1)
 
 try:
-	if args.mode == "read":
+	if args.mode == "r":
 		f = open(args.file, 'wb')
-	elif args.mode == "write":
+	elif args.mode == "w":
 		f = open(args.file, 'rb')
 except:
 	print "[-] Could not open {0}\r\n".format(args.file)
 	sys.exit(1)
 
 print "[*] Opening serial port..."
-usb = serial.Serial(args.interface, 115200, timeout=.01)  # default 8-N-1
+usb = serial.Serial(args.interface, 115200, timeout=.01)  # default is 8-N-1
 usb.write("#\r\n")
 usb.read(8)
 print usb.read(1024) + "\r\n"
@@ -184,13 +196,13 @@ if not SPI_Setup(usb):
 	print "[-] Could not set up SPI\r\n"
 	bail(usb)
 
-if args.mode == "read":
+if args.mode == "r":
 	print "[*] Reading {0} bytes from {1}...\r\n".format(args.numbytes, hex(args.addr))
 	if not EEPROM_Read(usb, args.addr, args.numbytes, f):
 		print "[-] Could not read from EEPROM\r\n"
 		bail(usb)
 	print "\r\n[+] Saved to {0}\r\n".format(f.name)
-elif args.mode == "write":
+elif args.mode == "w":
 	print "[*] Writing {0} bytes to {1}...\r\n".format(args.numbytes, hex(args.addr))
 	if not EEPROM_Write(usb, args.addr, args.numbytes, f):
 		print "[-] Could not write to EEPROM\r\n"
@@ -201,4 +213,3 @@ elif args.mode == "write":
 f.close()
 Bin_Exit(usb)
 usb.close()
-

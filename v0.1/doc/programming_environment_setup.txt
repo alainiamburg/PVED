@@ -1,0 +1,49 @@
+########### 
+# Windows #
+###########
+
+1) Download and install WinAVR:
+	- http://winavr.sourceforge.net/
+
+2) Download and install AVR Studio:
+	- use AVR Studio 4 as it is simpler
+	- newer versions are Visual Studio clones, more powerful
+	- http://www.atmel.com/tools/STUDIOARCHIVE.aspx
+
+3) Create a project in AVR Studio
+	- select AVR GCC
+	- select ATmega328P
+
+4) Add source files and configuration
+	- add source/header files to project
+	- go to "Project" -> "Configuration Options" -> "Custom Options"
+		- check "Use WinAVR" and provide paths pointing to avr-gcc and make
+		
+5) Building
+	- click "Build" -> "Build"
+	- a .hex file will be produced
+
+
+#######
+# OSX #
+#######
+
+1) Download and Install CrossPack for AVR:
+	- http://www.obdev.at/products/crosspack/index.html
+
+2) Follow instructions on main page
+	- ensure correct MCU choice (atmega328)
+
+
+#########
+# Linux #
+#########
+
+1) Download and Install AVR Libc:
+	- http://www.nongnu.org/avr-libc/
+
+2) RTFM
+	- http://www.nongnu.org/avr-libc/user-manual/pages.html
+
+3) Use avrdude for programming:
+	- http://www.nongnu.org/avrdude/

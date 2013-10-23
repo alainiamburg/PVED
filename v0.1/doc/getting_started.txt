@@ -1,4 +1,5 @@
-This file contains instructions for programming and talking to the PVED. Please see "windows_environment_setup.txt" for instructions on setting up a programming environment in Windows.
+This file contains instructions for programming and talking to the PVED.
+Please see "programming_environment_setup.txt" if you would like to rebuild from source.
 
 
 Note: This guide is for AVR Studio 4 with WinAVR (Windows).
@@ -53,4 +54,7 @@ Note: This guide is for AVR Studio 4 with WinAVR (Windows).
 	- hit enter to get PVED out of idle state
 	- you should see a login prompt
 
-
+12) Attack the device
+	- use Saleae and Bus Pirate
+	- recover plaintexts
+	- modify passwords in memory
