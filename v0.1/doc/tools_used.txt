@@ -1,7 +1,7 @@
 == HW ==
-* AVRISP mkII
-* Saleae Logic 16
-* Bus Pirate
+* AVRISP mkII : http://www.digikey.com/product-detail/en/ATAVRISP2/ATAVRISP2-ND
+* Saleae Logic 16 : https://www.adafruit.com/products/733
+* Bus Pirate : http://www.seeedstudio.com/depot/bus-pirate-v3-assembled-p-609.html
 
 
 == SW ==
