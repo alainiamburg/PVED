@@ -1,5 +1,6 @@
 == HW ==
-* AVRISP mkII : http://www.digikey.com/product-detail/en/ATAVRISP2/ATAVRISP2-ND
+* AVRISP mkII : http://store.atmel.com/PartDetail.aspx?q=p:10500054
+* AVR Dragon : http://store.atmel.com/PartDetail.aspx?q=p:10500053
 * Saleae Logic 16 : https://www.adafruit.com/products/733
 * Bus Pirate : http://www.seeedstudio.com/depot/bus-pirate-v3-assembled-p-609.html
 
