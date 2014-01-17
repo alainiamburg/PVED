@@ -1,5 +1,5 @@
 1x ATMEGA328P-PU : http://www.digikey.com/product-detail/en/ATMEGA328-PU/ATMEGA328-PU-ND
-1x CAT25128LI-G : http://www.digikey.com/product-detail/en/CAT25128LI-G/CAT25128LI-GOS-ND/1770450
+1x CAT25128LI-G : http://www.digikey.com/product-detail/en/CAT25128LI-G/CAT25128LI-GOS-ND
 1x FTDI Basic Breakout - 5V : https://www.sparkfun.com/products/9716
 1x 0.1uF Ceramic Capacitor : https://www.sparkfun.com/products/8375
 1x 10uF Electrolytic Capacitor : https://www.sparkfun.com/products/523
