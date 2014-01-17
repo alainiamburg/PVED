@@ -1,12 +1,12 @@
-1x ATMEGA328P-PU
-1x CAT25128LI-G
-1x FTDI Basic Breakout - 5V
-1x 0.1uF Ceramic Capacitor
-1x 10uF Electrolytic Capacitor
-1x Strip break-away header pins - Male, Straight
-1x Strip break-away header pins - Male, Right Angle
-1x KIT-1593K-BK
-1-3x Roll 22 AWG solid-core wire (recommend multiple colors)
-1x 28-pin DIP socket (optional, recommended)
-1x 8-pin DIP socket (optional, recommended)
-1x 1N4001 Diode (optional, to help prevent damage from polarity reversal)
+1x ATMEGA328P-PU : http://www.digikey.com/product-detail/en/ATMEGA328-PU/ATMEGA328-PU-ND
+1x CAT25128LI-G : http://www.digikey.com/product-detail/en/CAT25128LI-G/CAT25128LI-GOS-ND/1770450
+1x FTDI Basic Breakout - 5V : https://www.sparkfun.com/products/9716
+1x 0.1uF Ceramic Capacitor : https://www.sparkfun.com/products/8375
+1x 10uF Electrolytic Capacitor : https://www.sparkfun.com/products/523
+1x Strip break-away header pins - Male, Straight : https://www.sparkfun.com/products/116
+1x Strip break-away header pins - Male, Right Angle : https://www.sparkfun.com/products/553
+1x KIT-1593K-BK : http://www.mouser.com/ProductDetail/BusBoard-Prototype-Systems/KIT-1593K-BK/?qs=ESP0OwbMTICecbX8pImfZQ==
+1-3x Roll 22 AWG solid-core wire (recommend multiple colors) : https://www.sparkfun.com/products/8022
+1x 28-pin DIP socket (optional, recommended) : https://www.sparkfun.com/products/7942
+1x 8-pin DIP socket (optional, recommended) : https://www.sparkfun.com/products/7937
+1x 1N4001 Diode (optional, to help prevent damage from polarity reversal) : https://www.sparkfun.com/products/8589
