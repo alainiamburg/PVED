@@ -9,4 +9,5 @@
 1-3x Roll 22 AWG solid-core wire (recommend multiple colors) : https://www.sparkfun.com/products/8022
 1x 28-pin DIP socket (optional, recommended) : https://www.sparkfun.com/products/7942
 1x 8-pin DIP socket (optional, recommended) : https://www.sparkfun.com/products/7937
+1x 2x3 Pin Shrouded Header : https://www.sparkfun.com/products/10877
 1x 1N4001 Diode (optional, to help prevent damage from polarity reversal) : https://www.sparkfun.com/products/8589
