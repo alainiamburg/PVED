@@ -1,12 +1,31 @@
 == HW ==
-* AVRISP mkII (required for programming) : http://store.atmel.com/PartDetail.aspx?q=p:10500054
-* AVR Dragon (optional for in-circuit debugging) : http://store.atmel.com/PartDetail.aspx?q=p:10500053
+Programmer:
+* AVRISP mkII : http://store.atmel.com/PartDetail.aspx?q=p:10500054
+
+Debugger:
+* AVR Dragon : http://store.atmel.com/PartDetail.aspx?q=p:10500053
+
+Logic Analyzer:
 * Saleae Logic 16 : https://www.adafruit.com/products/733
+
+Hardware Interface:
 * Bus Pirate : http://www.seeedstudio.com/depot/bus-pirate-v3-assembled-p-609.html
 
 
+
 == SW ==
-* Tera Term
-* AVR Studio 4
-* Saleae
-* Python
+IDE:
+* AVR Studio 4 : http://www.atmel.com/tools/studioarchive.aspx
+
+Analyzer Software:
+* Saleae : http://www.saleae.com/downloads
+
+Bus Pirate Script Support:
+* Python : http://www.python.org/
+
+Terminal Emulation:
+* minicom : http://linux.die.net/man/1/minicom
+* screen : https://www.gnu.org/software/screen/
+* RealTerm : http://realterm.sourceforge.net/
+* Tera Term : http://ttssh2.sourceforge.jp/index.html.en
+
