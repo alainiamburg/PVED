@@ -11,6 +11,8 @@ Logic Analyzer:
 Hardware Interface:
 * Bus Pirate : http://www.seeedstudio.com/depot/bus-pirate-v3-assembled-p-609.html
 
+Soldering Iron (not required if using Breadboard):
+* Weller WES51 : http://www.amazon.com/Weller-WES51-Analog-Soldering-Station/dp/B000BRC2XU/
 
 
 == SW ==

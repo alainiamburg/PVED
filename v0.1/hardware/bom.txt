@@ -22,4 +22,4 @@ Miscellaneous:
 1x 8-pin DIP socket (optional, recommended) : https://www.sparkfun.com/products/7937
 1x 2x3 Pin Shrouded Header (optional) : https://www.sparkfun.com/products/10877
 1x 1N4001 Diode (optional, to help prevent damage from polarity reversal) : https://www.sparkfun.com/products/8589
-1x Spool Solder (if using the Hammond Protobox) : https://www.sparkfun.com/products/9161
+1x Spool Solder (not required if using Breadboard) : https://www.sparkfun.com/products/9161
