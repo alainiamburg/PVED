@@ -20,8 +20,8 @@ def Bin_Enter(usb):
 
 	while (entry_bytes and not success):
 		usb.write("\x00")
-		entry_bytes = entry_bytes-1
-		if "BBIO" in usb.read(10):
+		entry_bytes = entry_bytes - 1
+		if "BBIO" in usb.read(10):  #10
 			success = 1
 			
 	return success
@@ -48,7 +48,7 @@ def SPI_Setup(usb):
 	usb.write("\x49")           # 0100 1001 = Power ON, CS High
 	if "\x00" in usb.read():
 		success = 0
-	usb.write("\x63")           # 0110 0011 = 1 MHz
+	usb.write("\x67")           # 0110 0011 = 1 MHz  0110 0111 = 8 MHz
 	if "\x00" in usb.read():
 		success = 0
 	usb.write("\x8A")           # 1000 1010 = 3.3v, clock idle low, 
@@ -57,41 +57,46 @@ def SPI_Setup(usb):
 		
 	return success
 
-
+	
 def EEPROM_Read(usb, addr, readbytes, outfile):
 	success = 0
+
+	# [COMMAND][NUM BYTES TO WRITE][NUM BYTES TO READ][BYTES TO WRITE]
+	#  (1byte)       (2 bytes)          (2 bytes)      (0-4096 bytes)
 	
-	# [COMMAND][NUMBER OF WRITE BYTES][NUMBER OF READ BYTES][BYTES TO WRITE]
-	#  (1byte)        (2 bytes)              (2 bytes)       (0-4096 bytes)
-	usb.write("\x04")                         # Write-Then-Read cmd
-	#usb.write("\x00\x03")                     # Number of write bytes  *Use this for ON SEMI SPI
-	usb.write("\x00\x04")                     # Number of write bytes  *Use this for WINBOND SPI
-	print "DEBUG: Reading {0} bytes".format(hex(readbytes))
-	usb.write(struct.pack('>H', readbytes))   # Number of read bytes
-	usb.write("\x03")                         # EEPROM Read command
-	#usb.write(struct.pack('>h', addr))        # Read from addr   *Use this for 16 bit addrseses (ON SEMI SPI)
-	print "DEBUG: Reading from {0}".format(hex(addr))
-	usb.write(struct.pack('>B', addr>>16))
-	usb.write(struct.pack('>H', addr&0xFFFF))   # 24 bit address  *Use this for WINBOND SPI
-	time.sleep(0.5)                           # Bus Pirate needs more time for longer reads
-	if "\x01" == usb.read():
+	## Command ##
+	packet = "\x04"							# Write-Then-Read Bus Pirate cmd
+	## Number of Bytes to Write ##
+	packet += "\x00\x03"					# 1-byte EEPROM READ command + 2-byte addr
+	## Number of Bytes to Read ##
+	packet += struct.pack('>H', readbytes&0xFFFF)
+	## Bytes to Write ##
+	packet += "\x03"						# EEPROM Read command (see datasheet)                 
+	packet += struct.pack('>H', addr)		# 16-bit address
+	usb.write(packet)
+	
+	## Receive Incoming Bytes ##
+	while (usb.inWaiting() == 0):
+		wait = 1
+	
+	if "\x01" in usb.read():
 		success = 1
 		data = usb.read(readbytes)
-		outfile.write(data)
 		if args.x:
 			dump(data, 16, addr)
-
+		
+	outfile.write(data)
 	return success
 	
 	
 def EEPROM_Write(usb, addr, writebytes, infile):
 	success = 1
 	
-	# Bulk SPI Transfer command method
+	# Bulk SPI Transfer command used to send Write Enable command
 	usb.write("\x02")                       # 0000 0010 - Bring CS Low
 	if "\x01" != usb.read():
 		success = 0
-	usb.write("\x10")                       # 0001 0000 Bulk SPI Transfer 1 byte
+	usb.write("\x10")                       # 0001 0000 = Bulk SPI Transfer 1 byte
 	if "\x01" != usb.read():   
 		success = 0
 	usb.write("\x06")                       # EEPROM Write Enable command
@@ -99,17 +104,23 @@ def EEPROM_Write(usb, addr, writebytes, infile):
 	usb.write("\x03")                       # 0000 0011 - Bring CS High
 	if "\x01" != usb.read():
 		success = 0
-	
-	# Write-Then-Read command method (takes care of CS transitions)
-	# [COMMAND][NUMBER OF WRITE BYTES][NUMBER OF READ BYTES][BYTES TO WRITE]
-	#  (1byte)        (2 bytes)              (2 bytes)       (0-4096 bytes)	
-	usb.write("\x04")                           # Write-Then-Read cmd
-	usb.write(struct.pack('>H', writebytes+3))  # Number of write bytes
-	usb.write("\x00\x00")                       # Number of read bytes
-	usb.write("\x02")						    # EEPROM Write command
-	usb.write(struct.pack('>H', addr))		    # Write to addr
 
-	for b in range(writebytes):                 # Write
+	
+	# Write-Then-Read command (takes care of CS transitions) used to write data
+	# [COMMAND][# OF BYTES TO WRITE][# OF BYTES TO READ][BYTES TO WRITE]
+	#  (1byte)       (2 bytes)           (2 bytes)       (0-4096 bytes)	
+
+	## Command ##
+	usb.write("\x04")                           # Write-Then-Read cmd
+	## Number of Bytes to Write ##
+	usb.write(struct.pack('>H', writebytes+3))  # bytes to write to eeprom + command + address
+	## Number of Bytes to Read ##
+	usb.write("\x00\x00")                       # read nothing, we are doing a write operation
+	## Bytes to Write ##
+	usb.write("\x02")			    # EEPROM Write command
+	usb.write(struct.pack('>H', addr))	    # Address (16 bits))
+	## Write Bytes to SPI ##
+	for b in range(writebytes):
 		char = infile.read(1)
 		usb.write(char)
 	if "\x01" != usb.read():
@@ -145,7 +156,7 @@ def dump(data, length, addr):
 
 parser = argparse.ArgumentParser(description="Bus Pirate script for SPI EEPROM read/write.")
 parser.add_argument("bp_interface", help="Bus Pirate serial interface (e.g. /dev/ttyUSB0)")
-parser.add_argument("eeprom_chip", choices=['cat25128', 'w25q32bv'], help="specify EEPROM chip")
+#parser.add_argument("addr_len", choices=['16', '24'], help="length of address in bits (check EEPROM datasheet)")
 parser.add_argument("addr", type=int, help="EEPROM address from which to read/write")
 parser.add_argument("mode", choices=['r', 'w'], help="read or write")
 parser.add_argument("numbytes", type=int, help="number of bytes to read or write")
@@ -155,20 +166,17 @@ parser.add_argument("-p", help="enable power from Bus Pirate", action="store_tru
 args = parser.parse_args()
 
 if args.mode == "write" and args.numbytes > 64:
-	print "TODO: Add support to write more than 64 bytes at a time.\r\n"
+	print "TODO: Add support to write more than 64 (or 256) bytes at a time.\r\n"
 	sys.exit(1)
 		
-if args.numbytes > 4096:
-	print "TODO: Add support to read more than 4096 bytes at a time.\r\n"
-	sys.exit(1)
 
-if not os.access(args.interface, os.W_OK):
+if not os.access(args.bp_interface, os.W_OK):
 	print "[-] Cannot access interface. Check your permissions.\r\n"
 	sys.exit(1)
 
 try:
 	if args.mode == "r":
-		f = open(args.file, 'wb')
+		f = open(args.file, 'ab')
 	elif args.mode == "w":
 		f = open(args.file, 'rb')
 except:
@@ -176,7 +184,7 @@ except:
 	sys.exit(1)
 
 print "[*] Opening serial port..."
-usb = serial.Serial(args.interface, 115200, timeout=.01)  # default is 8-N-1
+usb = serial.Serial(args.bp_interface, 115200, timeout=0.1)  # default is 8-N-1 #timeout=0.1
 usb.write("#\r\n")
 usb.read(8)
 print usb.read(1024) + "\r\n"
@@ -201,13 +209,13 @@ if args.mode == "r":
 	if not EEPROM_Read(usb, args.addr, args.numbytes, f):
 		print "[-] Could not read from EEPROM\r\n"
 		bail(usb)
-	print "\r\n[+] Saved to {0}\r\n".format(f.name)
+	print "\r\n\n[+] Saved to {0}\r\n".format(f.name)
 elif args.mode == "w":
 	print "[*] Writing {0} bytes to {1}...\r\n".format(args.numbytes, hex(args.addr))
 	if not EEPROM_Write(usb, args.addr, args.numbytes, f):
 		print "[-] Could not write to EEPROM\r\n"
 		bail(usb)
-	print "\r\n[+] EEPROM written\r\n"
+	print "\r\n\n[+] EEPROM written\r\n"
 		
 
 f.close()
