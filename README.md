@@ -17,6 +17,9 @@ A black box, the only interface being a mini USB port for serial communication. 
 
 Attack Scenarios:<br>
 *Password Cracking<br>
-*Password Reset
+*Password Reset <br>
 
-
+Companion blog posts: <br>
+https://www.optiv.com/blog/demystifying-hardware-security-part-i <br>
+https://www.optiv.com/blog/demystifying-hardware-security-part-ii (contains solutions) <br>
+https://www.optiv.com/blog/demystifying-hardware-security-part-ii (contains solutions)
