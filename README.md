@@ -13,7 +13,9 @@ Purposely Vulnerable Embedded Device
 == Version 0.1 ==<br>
 MCU: Atmega328
 
-A black box, the only interface being a mini USB port for serial communication.  A login prompt requests credentials from the user.
+A black box, the only interface being a mini USB port for serial communication.  A login prompt requests credentials from the user.<br>
+
+![login](https://raw.githubusercontent.com/alainiamburg/PVED/master/v0.1/pics/login.jpg)
 
 Attack Scenarios:<br>
 *Password Cracking<br>
